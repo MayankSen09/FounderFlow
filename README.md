@@ -1,132 +1,171 @@
-# AI SOP System
+<div align="center">
 
-An AI-powered Standard Operating Procedure (SOP) Management System designed to optimize operational efficiency, enhance team productivity, and drive strategic growth.
+# ⚡ FounderFlow
 
-This platform enables organizations to seamlessly create, manage, and distribute SOPs through an intuitive, centralized interface. By leveraging advanced AI capabilities, it not only automates SOP generation but also assists in developing high-converting marketing funnels and strategic workflows.
+### Your AI Co-Founder for Building, Funding & Scaling Startups
 
-The system ensures consistency, scalability, and compliance across teams while reducing manual effort and operational bottlenecks. With intelligent content generation, real-time collaboration, and structured process management, organizations can standardize operations, accelerate execution, and improve overall business performance.
+[![Built with React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178c6?style=flat-square&logo=typescript)](https://typescriptlang.org)
+[![Powered by Gemini](https://img.shields.io/badge/AI-Gemini%202.5%20Flash-8E75B2?style=flat-square&logo=google)](https://ai.google.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-![AI SOP System](public/glass-funnel-ultra.png)
+**FounderFlow is an AI-powered operations platform that acts as a virtual co-founder** — it remembers your decisions, tracks your mistakes, manages your fundraising, and gives you contextual advice based on everything it knows about your startup.
 
-## 🚀 Live Demo
+[Get Started](#-quick-start) · [Features](#-features) · [Architecture](#-architecture) · [Contributing](#-contributing)
 
-**[View Live Application >](https://ai-sop-master-gmwbdkzlx-r-mayank-sens-projects.vercel.app)**
+</div>
 
-## ✨ Key Features
+---
 
-*   **AI-Powered SOP Generation:** Automatically generate detailed SOPs from simple prompts or raw text inputs.
-*   **🆕 Advanced SOP Generator:** Create professional, comprehensive SOPs with industry-specific templates and AI-powered research.
-    *   **6 Industry Templates:** Social Media Management, Sales Operations, Customer Support, Web Development, Content Production, HR Onboarding
-    *   **AI Research:** Automatically researches and incorporates industry best practices
-    *   **Rich Formatting:** Professional markdown with phases, tables, checklists, and procedures
-    *   **Export Options:** Download as Markdown or PDF
-    *   **4-Step Workflow:** Template selection → Customization → AI generation → Preview & export
-*   **Marketing Funnel Builder:** Create comprehensive marketing funnels with AI-driven strategies and visual drag-and-drop interfaces.
-*   **ROI Calculator:** specific tools for calculating Return on Investment for various marketing campaigns.
-*   **Team Collaboration:** Manage team members, assign roles, and track SOP usage across the organization.
-*   **PDF Export:** Professional PDF export functionality for all generated SOPs.
-*   **Interactive Dashboards:** Visual analytics and reporting for operational efficiency.
-*   **Dark/Light Mode:** Fully responsive UI with seamless theme switching.
+## 🧠 What Makes This Different
 
-## 🛠️ Tech Stack
+Most startup tools give you generic advice. FounderFlow **learns you**.
 
-*   **Frontend:** [React](https://reactjs.org/) (v18), [Vite](https://vitejs.dev/)
-*   **Language:** [TypeScript](https://www.typescriptlang.org/)
-*   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-*   **Animation:** [Framer Motion](https://www.framer.com/motion/)
-*   **Markdown Rendering:** [React Markdown](https://github.com/remarkjs/react-markdown)
-*   **Icons:** [Lucide React](https://lucide.dev/)
-*   **AI Integration:** Google Gemini 2.5 Flash API
-*   **State Management:** React Context API
-*   **Deployment:** [Vercel](https://vercel.com/)
+- It knows your burn rate is $47k/mo and you have 8 months of runway
+- It remembers you pivoted pricing 3 times and what worked
+- It tracks that you have 12 investors in pipeline with 3 in due diligence
+- When you ask "what should I focus on this week?" — it gives you an answer that's specific to **your** situation
 
-## 📦 Getting Started
+This isn't a chatbot. It's a co-founder with perfect memory.
 
-1.  **Clone the repository**
-    ```bash
-    git clone https://github.com/MayankSen09/AI-SOP-Master.git
-    cd AI-SOP-Master
-    ```
+---
 
-2.  **Install dependencies**
-    ```bash
-    npm install
-    ```
+## ✨ Features
 
-3.  **Start the development server**
-    ```bash
-    npm run dev
-    ```
+### 🤖 AI Co-Founder Chat
+A conversational AI advisor that has full context of your founder journey — profile, journal entries, funding status, past mistakes, and wins. Ask it anything from "review my burn rate" to "help me prepare for an investor pitch."
 
-4.  **Build for production**
-    ```bash
-    npm run build
-    ```
+### 📓 Founder Journal
+Log every decision, mistake, win, learning, and pivot. Tag entries, track patterns over time, and let the AI surface insights like _"You've changed your pricing model 3 times — here's what stuck."_
 
-## 📖 Using the Advanced SOP Generator
+### 💰 Funding Tracker
+Manage funding rounds from Pre-Seed through Series B. Track investor pipeline (cold → warm → pitched → due diligence → committed), monitor raise progress, and never miss a follow-up.
 
-### Quick Start
+### 📊 Founder Command Center
+A real-time dashboard showing runway countdown, burn rate, MRR, active fundraising progress, recent wins/mistakes, and AI-generated tips based on your current situation.
 
-1. Navigate to **"Advanced SOP"** in the sidebar (Management section)
-2. Choose from 6 industry-specific templates
-3. Customize your SOP with specific parameters
-4. Let AI generate a comprehensive, professional document
-5. Export as Markdown or PDF
+### 🧭 Strategy Matrix
+Input your metrics and align with proven founder frameworks — Lean Startup, Blitzscaling, Product-Led Growth, or Default Alive.
 
-### Available Templates
+### 💵 Runway & Burn Calculator
+Financial projections with 12-month cash exhaustion modeling. Track net burn, runway, MRR, and campaign ROI.
 
-| Template | Icon | Phases | Best For |
-|----------|------|--------|----------|
-| **Social Media Management** | 📱 | 10 | Marketing agencies, content teams, social media managers |
-| **Sales Operations** | 🎯 | 8 | B2B sales teams, enterprise sales, SaaS companies |
-| **Customer Support** | 💬 | 7 | Support teams, help desks, customer success |
-| **Web Development** | 💻 | 9 | Development agencies, software teams, startups |
-| **Content Production** | ✍️ | 8 | Content agencies, marketing teams, publishers |
-| **HR Onboarding** | 👥 | 7 | HR departments, people operations, any company |
+### 📋 Playbook Generator
+AI-powered SOP generation with startup-specific templates: Technical Founder Hiring, Product-Market Fit Discovery, and Investor Relations.
 
-### How It Works
+### 🔄 Growth Funnel Architect
+Build and visualize customer acquisition funnels with AI-generated stage strategies, channel recommendations, and optimization tips.
 
-**Step 1: Template Selection**
-- Browse the template library
-- Each template is pre-configured with industry best practices
-- Template cards show category, phase count, and description
+---
 
-**Step 2: Customization**
-- Enter your SOP title (e.g., "Instagram Content Strategy")
-- Select your industry
-- Configure template-specific parameters:
-  - Team size
-  - Target platforms
-  - Objectives and KPIs
-  - Compliance requirements
-  - And more...
+## 🏗️ Architecture
 
-**Step 3: AI Generation**
-- Watch real-time progress (10-20 seconds)
-- AI researches industry best practices
-- Creates comprehensive phase structures
-- Formats with tables, checklists, and procedures
+```
+founderflow/
+├── src/                          # React Frontend
+│   ├── pages/
+│   │   ├── Dashboard.tsx         # Founder Command Center
+│   │   ├── AIAdvisor.tsx         # AI Co-Founder Chat
+│   │   ├── FounderJournal.tsx    # Decision/Mistake/Win Logger
+│   │   ├── FundingTracker.tsx    # Investor Pipeline Manager
+│   │   ├── StrategyGenerator.tsx # Founder Frameworks
+│   │   ├── ROICalculator.tsx     # Runway & Burn
+│   │   ├── AdvancedSOPGenerator.tsx # Playbook Generator
+│   │   ├── FunnelBuilder.tsx     # Growth Funnel
+│   │   └── Settings.tsx          # Profile & Startup Config
+│   ├── context/
+│   │   ├── FounderContext.tsx    # 🧠 The AI brain — stores profile,
+│   │   │                        #    journal, funding, chat history
+│   │   ├── AuthContext.tsx       # Authentication
+│   │   ├── DataContext.tsx       # App data management
+│   │   └── ThemeContext.tsx      # Dark/light mode
+│   ├── lib/
+│   │   ├── ai.ts                # Gemini API integration
+│   │   └── sopTemplates.ts      # Startup playbook templates
+│   └── components/
+│       ├── Layout/              # Sidebar, Header, Layout
+│       └── FunnelBuilder/       # Funnel visualization components
+├── backend/                     # Express + Prisma Backend
+│   ├── src/
+│   │   ├── app.ts               # Express server
+│   │   ├── routes/              # API routes
+│   │   ├── controllers/         # Request handlers
+│   │   ├── services/            # Business logic (AI, Auth, Email)
+│   │   └── middleware/          # Rate limiting, error handling
+│   └── prisma/
+│       └── schema.prisma        # Database schema
+└── package.json
+```
 
-**Step 4: Preview & Export**
-- Review the generated SOP with full markdown formatting
-- Export as Markdown (.md) for editing
-- Export as PDF for distribution
-- Save to library for future reference
+---
 
-### Example Output
+## 🚀 Quick Start
 
-Each generated SOP includes:
-- ✅ 7-10 detailed phases with clear objectives
-- ✅ Comprehensive tables (frameworks, comparisons, role matrices)
-- ✅ Actionable checklists with bullet points
-- ✅ Step-by-step procedures
-- ✅ Industry-specific best practices
-- ✅ Professional formatting ready for immediate use
+### Prerequisites
+- [Bun](https://bun.sh) v1.3+ (or Node.js 18+)
+- [Google Gemini API Key](https://makersuite.google.com/app/apikey)
 
-## 🤝 Contributing
+### Setup
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+```bash
+# Clone
+git clone https://github.com/YOUR_USERNAME/founderflow.git
+cd founderflow
+
+# Install dependencies
+bun install
+cd backend && bun install && cd ..
+
+# Configure environment
+cp .env.example .env
+# Add your VITE_GEMINI_API_KEY to .env
+
+# Run frontend
+bun run dev
+
+# Run backend (in a separate terminal)
+cd backend
+bun run build && bun run start
+```
+
+The app will be available at `http://localhost:5173`
+
+---
+
+## 🔧 Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | React 19, TypeScript, Vite, Framer Motion |
+| **Styling** | Tailwind CSS with custom Architect design system |
+| **AI** | Google Gemini 2.5 Flash via REST API |
+| **Backend** | Express.js, Prisma ORM |
+| **Database** | SQLite (dev) / PostgreSQL (prod) |
+| **Runtime** | Bun |
+| **Charts** | Recharts |
+
+---
+
+## 🛡️ Security
+
+- API keys are client-side only (use backend proxy for production)
+- Rate limiting on all API endpoints
+- Input sanitization and XSS prevention
+- Session timeout with encrypted localStorage
+- Security headers via Helmet
+
+See [SECURITY.md](SECURITY.md) for full details.
+
+---
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+MIT — build whatever you want with it.
+
+---
+
+<div align="center">
+
+**Built for founders who move fast and need an AI that keeps up.**
+
+</div>

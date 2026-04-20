@@ -1,6 +1,6 @@
 # Security Implementation Guide
 
-This document outlines the security measures implemented in AI SOP Master.
+This document outlines the security measures implemented in FounderFlow.
 
 ## 🔐 Security Features Implemented
 

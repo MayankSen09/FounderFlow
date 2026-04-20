@@ -92,7 +92,7 @@ export default function AdvancedSOPGenerator() {
             setTimeout(() => {
                 setGeneratedSOP(result);
                 setStep('preview');
-                success('SOP Generated Successfully!');
+                success('Playbook Generated Successfully!');
             }, 500);
 
         } catch (err: any) {
@@ -167,11 +167,11 @@ export default function AdvancedSOPGenerator() {
                 <div className="flex items-center justify-center gap-3">
                     <BookOpen className="w-10 h-10 text-brand-primary" />
                     <h1 className="text-5xl font-black text-primary tracking-tight">
-                        Advanced <span className="architect-gradient">SOP Generator</span>
+                        Founder <span className="architect-gradient">Playbook Generator</span>
                     </h1>
                 </div>
                 <p className="text-tertiary font-medium text-lg max-w-2xl mx-auto">
-                    Create professional, comprehensive Standard Operating Procedures with AI-powered research and formatting
+                    Generate elite startup playbooks and standard operating procedures to scale your operations rapidly.
                 </p>
             </motion.div>
 
@@ -260,10 +260,10 @@ export default function AdvancedSOPGenerator() {
                             </div>
 
                             <div className="space-y-6">
-                                {/* SOP Title */}
+                                {/* Playbook Title */}
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-secondary uppercase tracking-wider">
-                                        SOP Title *
+                                        Playbook Title *
                                     </label>
                                     <input
                                         type="text"
@@ -354,7 +354,7 @@ export default function AdvancedSOPGenerator() {
                                     onClick={handleGenerate}
                                     className="w-full py-6 text-lg font-black uppercase tracking-wider rounded-2xl mt-8"
                                 >
-                                    Generate Professional SOP
+                                    Generate Playbook
                                 </Button>
                             </div>
                         </Card>
@@ -380,7 +380,7 @@ export default function AdvancedSOPGenerator() {
 
                             <div className="space-y-4">
                                 <h2 className="text-3xl font-black text-primary">
-                                    Generating Your SOP...
+                                    Generating Your Playbook...
                                 </h2>
                                 <div className="space-y-2">
                                     {generationProgress < 30 && (
@@ -437,7 +437,7 @@ export default function AdvancedSOPGenerator() {
                                     <div className="flex items-center gap-4">
                                         <CheckCircle2 className="w-10 h-10" />
                                         <div>
-                                            <h2 className="text-3xl font-black">SOP Generated Successfully!</h2>
+                                            <h2 className="text-3xl font-black">Playbook Generated Successfully!</h2>
                                             <p className="text-white/80 font-medium mt-1">
                                                 {generatedSOP.metadata.wordCount} words • Version {generatedSOP.metadata.version}
                                             </p>
@@ -485,14 +485,14 @@ export default function AdvancedSOPGenerator() {
                                     onClick={handleReset}
                                     className="text-sm font-bold text-tertiary hover:text-primary transition-colors uppercase tracking-wider"
                                 >
-                                    Create Another SOP
+                                    Create Another Playbook
                                 </button>
                                 <span className="text-architect-border">•</span>
                                 <button
                                     onClick={() => navigate('/sops')}
                                     className="text-sm font-bold text-tertiary hover:text-primary transition-colors uppercase tracking-wider"
                                 >
-                                    View All SOPs
+                                    View All Playbooks
                                 </button>
                             </div>
                         </Card>

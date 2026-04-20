@@ -1,121 +1,105 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, User, ArrowRight } from 'lucide-react';
+import { Layers, ArrowRight, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import type { UserRole } from '../types';
+import { useFounder } from '../context/FounderContext';
+import { ThemeToggle } from '../components/ui/ThemeToggle';
 
 export function Onboarding() {
     const navigate = useNavigate();
     const { login } = useAuth();
+    const { updateProfile } = useFounder();
+    const [loading, setLoading] = useState(false);
+    
+    // Quick core profile
+    const [name, setName] = useState('');
+    const [startupName, setStartupName] = useState('');
+    const [industry, setIndustry] = useState('');
 
-    const handleRoleSelect = (role: UserRole) => {
-        login(role);
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
         setTimeout(() => {
+            updateProfile({
+                name: name || 'Founder',
+                startupName: startupName || 'My Startup',
+                industry: industry || 'Technology',
+                stage: 'seed', // Default
+            });
+            login('Admin'); // System requires a role
             navigate('/dashboard');
-        }, 600);
+        }, 800);
     };
 
-    const roles = [
-        {
-            role: 'Admin' as UserRole,
-            icon: Shield,
-            title: 'Administrator',
-            description: 'Full access to manage SOPs, users, and organization settings. Ideal for managers and team leads.',
-            color: 'indigo'
-        },
-        {
-            role: 'Editor' as UserRole,
-            icon: User,
-            title: 'Team Member',
-            description: 'View, follow, and suggest edits to Standard Operating Procedures assigned to you.',
-            color: 'teal'
-        }
-    ];
-
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-slate-50 dark:from-slate-900 dark:via-indigo-950/30 dark:to-slate-900 flex items-center justify-center p-6">
-            <div className="w-full max-w-5xl">
-                {/* Header */}
+        <div className="min-h-screen page-bg flex flex-col">
+            <div className="p-6 flex justify-end">
+                <ThemeToggle />
+            </div>
+            
+            <div className="flex-1 flex flex-col items-center justify-center p-6">
                 <motion.div
-                    initial={{ opacity: 0, y: -20 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-12"
+                    className="w-full max-w-sm"
                 >
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 rounded-full shadow-sm border border-slate-200 dark:border-slate-700 mb-6">
-                        <div className="w-6 h-6 rounded-md bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center">
-                            <Shield className="w-4 h-4 text-white" />
+                    <div className="flex justify-center mb-8">
+                        <div className="w-14 h-14 rounded-2xl bg-black dark:bg-white flex items-center justify-center shadow-md">
+                            <Layers className="w-8 h-8 text-white dark:text-black" />
                         </div>
-                        <span className="font-semibold text-sm text-slate-900 dark:text-slate-100">Start your journey</span>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-4 tracking-tight">
-                        Welcome to SOPMaster
-                    </h1>
-                    <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                        Select your role to configure your personalized workspace.
-                    </p>
-                </motion.div>
+                    
+                    <div className="text-center mb-8">
+                        <h1 className="text-3xl font-bold tracking-tight text-heading mb-2">FounderFlow</h1>
+                        <p className="text-muted text-sm">Configure your AI Co-Founder.</p>
+                    </div>
 
-                {/* Role Cards */}
-                <div className="grid md:grid-cols-2 gap-6">
-                    {roles.map((item, index) => (
-                        <motion.div
-                            key={item.role}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label className="block text-xs font-semibold text-heading mb-1.5 ml-1">Your Name</label>
+                            <input
+                                type="text"
+                                required
+                                value={name}
+                                onChange={e => setName(e.target.value)}
+                                placeholder="Steve Jobs"
+                                className="w-full px-4 py-3 rounded-xl bg-input border border-default text-heading placeholder:text-faint focus:outline-none focus:ring-1 focus:ring-heading text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-heading mb-1.5 ml-1">Startup Name</label>
+                            <input
+                                type="text"
+                                required
+                                value={startupName}
+                                onChange={e => setStartupName(e.target.value)}
+                                placeholder="Apple"
+                                className="w-full px-4 py-3 rounded-xl bg-input border border-default text-heading placeholder:text-faint focus:outline-none focus:ring-1 focus:ring-heading text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-heading mb-1.5 ml-1">Industry</label>
+                            <input
+                                type="text"
+                                required
+                                value={industry}
+                                onChange={e => setIndustry(e.target.value)}
+                                placeholder="Consumer Electronics"
+                                className="w-full px-4 py-3 rounded-xl bg-input border border-default text-heading placeholder:text-faint focus:outline-none focus:ring-1 focus:ring-heading text-sm"
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={loading || !name.trim() || !startupName.trim() || !industry.trim()}
+                            className="w-full flex items-center justify-center gap-2 px-4 py-3.5 mt-6 rounded-xl bg-black dark:bg-white text-white dark:text-black font-semibold text-sm disabled:opacity-50 transition-all hover:bg-neutral-800 dark:hover:bg-neutral-200"
                         >
-                            <button
-                                onClick={() => handleRoleSelect(item.role)}
-                                className={`
-                                    w-full p-8 rounded-2xl border-2 text-left transition-all duration-300
-                                    bg-white dark:bg-slate-800 
-                                    border-slate-200 dark:border-slate-700
-                                    hover:border-${item.color}-400 dark:hover:border-${item.color}-600
-                                    hover:shadow-xl hover:shadow-${item.color}-500/10
-                                    hover:-translate-y-1
-                                    group
-                                `}
-                            >
-                                <div className={`
-                                    w-16 h-16 rounded-2xl mb-6 flex items-center justify-center
-                                    bg-${item.color}-100 dark:bg-${item.color}-900/30
-                                    text-${item.color}-600 dark:text-${item.color}-400
-                                    group-hover:scale-110 transition-transform
-                                `}>
-                                    <item.icon className="w-8 h-8" />
-                                </div>
-                                <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-3">
-                                    {item.title}
-                                </h3>
-                                <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-                                    {item.description}
-                                </p>
-                                <div className={`
-                                    inline-flex items-center gap-2 text-sm font-semibold
-                                    text-${item.color}-600 dark:text-${item.color}-400
-                                    group-hover:gap-3 transition-all
-                                `}>
-                                    Enter Workspace
-                                    <ArrowRight className="w-4 h-4" />
-                                </div>
-                            </button>
-                        </motion.div>
-                    ))}
-                </div>
-
-                {/* Footer */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    className="text-center mt-12"
-                >
-                    <button
-                        onClick={() => navigate('/')}
-                        className="text-sm text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-                    >
-                        ← Back to home
-                    </button>
+                            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
+                                <>Enter Workspace <ArrowRight className="w-4 h-4" /></>
+                            )}
+                        </button>
+                    </form>
                 </motion.div>
             </div>
         </div>
