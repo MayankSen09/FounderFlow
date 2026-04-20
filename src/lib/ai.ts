@@ -1,7 +1,10 @@
 import SecureLogger from './logger';
-// TODO: Integrate sanitizePromptInput and aiRateLimiter in AI functions
-// import { sanitizePromptInput } from './validation';
-// import { aiRateLimiter } from './rateLimit';
+function sanitizePromptInput(input: any): string {
+    if (input === undefined || input === null) return '';
+    if (typeof input !== 'string') input = JSON.stringify(input);
+    // Strip control characters and markdown blocks that could cause prompt injection
+    return input.replace(/[\u0000-\u001F\u007F-\u009F]|```/g, "").trim();
+}
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
@@ -11,15 +14,23 @@ if (!apiKey) {
 }
 
 export async function generateSOPContent(title: string, purpose: string, rawSteps: string) {
+{
     try {
-        console.log('🚀 Starting AI generation with:', { title, purpose, hasSteps: !!rawSteps });
+        const sanitizedTitle = sanitizePromptInput(title);
+        const sanitizedPurpose = sanitizePromptInput(purpose);
+        const sanitizedSteps = sanitizePromptInput(rawSteps);
+        
+        console.log('🚀 Starting AI generation with:', { title: sanitizedTitle, purpose: sanitizedPurpose, hasSteps: !!sanitizedSteps });
 
         const prompt = `You are a Senior Enterprise Operations Consultant with 15+ years of experience creating professional Standard Operating Procedures for Fortune 500 companies.
 
 Create a HIGHLY PROFESSIONAL, ENTERPRISE-GRADE Standard Operating Procedure document.
 
 INPUT REQUIREMENTS:
-${rawSteps}
+Title: ${sanitizedTitle}
+Purpose: ${sanitizedPurpose}
+Steps:
+${sanitizedSteps}
 
 OUTPUT REQUIREMENTS:
 Return ONLY valid JSON (no markdown, no code blocks, no explanations). The JSON must have this exact structure:
@@ -128,21 +139,24 @@ export async function generateMarketingFunnel(
     templateStages: any[]
 ) {
     try {
-        console.log('🎯 Starting Marketing Funnel generation...', { funnelType, industry, goal });
+        const safeIndustry = sanitizePromptInput(industry);
+        const safeGoal = sanitizePromptInput(goal);
+        const safeFunnelType = sanitizePromptInput(funnelType);
+        console.log('🎯 Starting Marketing Funnel generation...', { funnelType: safeFunnelType, industry: safeIndustry, goal: safeGoal });
 
         const prompt = `You are a Senior Growth Strategist and Funnel Architect with 15+ years of experience creating high-converting marketing funnels for Fortune 500 companies and unicorn startups.
 
 Create a COMPREHENSIVE, PROFESSIONAL marketing funnel strategy document.
 
 CONTEXT:
-- Funnel Type: ${funnelType}
-- Industry: ${industry}
-- Primary Goal: ${goal}
-- Target Customer: ${answers.targetCustomer}
-- Price Range: ${answers.priceRange}
-- Sales Cycle: ${answers.salesCycle}
-- Traffic Source: ${answers.trafficSource}
-- Business Stage: ${answers.businessStage}
+- Funnel Type: ${safeFunnelType}
+- Industry: ${safeIndustry}
+- Primary Goal: ${safeGoal}
+- Target Customer: ${sanitizePromptInput(answers.targetCustomer)}
+- Price Range: ${sanitizePromptInput(answers.priceRange)}
+- Sales Cycle: ${sanitizePromptInput(answers.salesCycle)}
+- Traffic Source: ${sanitizePromptInput(answers.trafficSource)}
+- Business Stage: ${sanitizePromptInput(answers.businessStage)}
 
 FUNNEL STAGES TO DETAIL:
 ${templateStages.map((stage, idx) => `${idx + 1}. ${stage.label}: ${stage.objective}`).join('\n')}
@@ -316,144 +330,29 @@ Return ONLY the JSON object. No explanations, no markdown formatting.`;
 }
 
 // ------------------------------------------------------------------
-// NEW AI FEATURES
+// AI CO-FOUNDER CHAT
 // ------------------------------------------------------------------
 
-export async function scanTrends(query: string) {
-    try {
-        const prompt = `Identify top 5 trending topics for "${query}" on Instagram, LinkedIn, and X (Twitter) for the upcoming week.
-        Return JSON:
-        {
-            "trends": [
-                {
-                    "topic": "Trend Name",
-                    "platform": "Instagram | LinkedIn | X",
-                    "volume": "High | Medium",
-                    "brandFitIdeas": ["Idea 1", "Idea 2"]
-                }
-            ]
-        }`;
-        return await callGemini(prompt);
-    } catch (error) {
-        console.error("Trend Scan Error", error);
-        return {
-            trends: [
-                { topic: "AI Automation", platform: "LinkedIn", volume: "High", brandFitIdeas: ["Showcase workflow wins", "Tutorial video"] },
-                { topic: "Behind the Scenes", platform: "Instagram", volume: "Medium", brandFitIdeas: ["Office tour", "Meet the team"] }
-            ]
-        };
-    }
-}
+export async function generateWithAI(prompt: string): Promise<string> {
+    if (!apiKey) throw new Error('API Key missing');
+    const safePrompt = sanitizePromptInput(prompt);
 
-export async function repurposeContent(content: string, platforms: string[]) {
-    try {
-        const prompt = `Repurpose this content: "${content.substring(0, 500)}..." for ${platforms.join(', ')}.
-        Return JSON:
+    const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
         {
-            "variations": [
-                {
-                    "platform": "Platform Name",
-                    "content": "Full post content...",
-                    "hashtags": ["#tag1", "#tag2"]
-                }
-            ]
-        }`;
-        return await callGemini(prompt);
-    } catch (error) {
-        return { variations: platforms.map(p => ({ platform: p, content: `Repurposed content for ${p}: ${content.substring(0, 50)}...`, hashtags: ["#repurposed"] })) };
-    }
-}
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: safePrompt }] }] }),
+        }
+    );
 
-export async function generatePersona(inputs: any) {
-    try {
-        const prompt = `Create a detailed audience persona based on: ${JSON.stringify(inputs)}.
-        Return JSON:
-        {
-            "name": "Persona Name",
-            "role": "Job Title",
-            "demographics": "Age, Location, etc.",
-            "painPoints": ["Pain 1", "Pain 2"],
-            "emotionalTriggers": ["FOMO", "Trust", "Fun"],
-            "contentPreferences": ["Video", "Long-form text"]
-        }`;
-        return await callGemini(prompt);
-    } catch (error) {
-        return {
-            name: "Alex the Manager",
-            role: "Marketing Manager",
-            demographics: "30-45, Urban",
-            painPoints: ["Time management", "ROI pressure"],
-            emotionalTriggers: ["Efficiency", "Data-backed"],
-            contentPreferences: ["Case studies", "Quick tips"]
-        };
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`API Error ${response.status}: ${errorText}`);
     }
-}
 
-export async function generateReply(message: string, context: string) {
-    try {
-        const prompt = `Draft a reply to this message: "${message}". Context: ${context}.
-        Return JSON:
-        {
-            "sentiment": "Positive | Negative | Neutral",
-            "replyOptions": [
-                { "tone": "Professional", "text": "Draft reply..." },
-                { "tone": "Friendly", "text": "Draft reply..." }
-            ]
-        }`;
-        return await callGemini(prompt);
-    } catch (error) {
-        return {
-            sentiment: "Neutral",
-            replyOptions: [
-                { tone: "Professional", text: "Thank you for your message. We will get back to you shortly." },
-                { tone: "Friendly", text: "Thanks for reaching out! We're on it. 😊" }
-            ]
-        };
-    }
-}
-
-export async function generateOptimizationTips(metrics: any) {
-    try {
-        const prompt = `Analyze these metrics: ${JSON.stringify(metrics)}. Provide 'Stop', 'Start', and 'Scale' recommendations.
-        Return JSON:
-        {
-            "recommendations": [
-                { "type": "Stop", "action": "Stop doing X", "reason": "Low engagement" },
-                { "type": "Start", "action": "Start doing Y", "reason": "Trending opportunity" },
-                { "type": "Scale", "action": "Scale Z", "reason": "High conversion" }
-            ],
-            "abTestIdeas": ["Test A vs B", "Test C vs D"]
-        }`;
-        return await callGemini(prompt);
-    } catch (error) {
-        return {
-            recommendations: [
-                { type: "Stop", action: "Low effort posts", reason: " declining reach" },
-                { type: "Start", action: "Video Content", reason: "High engagement on platform" },
-                { type: "Scale", action: "Customer Testimonials", reason: "Best conversion rate" }
-            ],
-            abTestIdeas: ["Short vs Long Caption", "Video vs Carousel"]
-        };
-    }
-}
-
-export async function generateMonetizationStrategy(niche: string) {
-    try {
-        const prompt = `Suggest monetization strategies for the "${niche}" niche.
-        Return JSON:
-        {
-            "leadMagnets": ["Idea 1", "Idea 2"],
-            "funnelSteps": ["Awareness", "Consideration", "Conversion"],
-            "offers": ["Course", "Consulting", "Template"]
-        }`;
-        return await callGemini(prompt);
-    } catch (error) {
-        return {
-            leadMagnets: ["Checklist", "E-book"],
-            funnelSteps: ["Ad -> Landing Page -> Email Sequence"],
-            offers: ["Masterclass", "1-on-1 Coaching"]
-        };
-    }
+    const data = await response.json();
+    return data.candidates[0].content.parts[0].text.trim();
 }
 
 // ------------------------------------------------------------------
@@ -467,17 +366,22 @@ export async function generateAdvancedSOP(
     parameters: Record<string, any>
 ) {
     try {
-        console.log('🚀 Starting Advanced SOP generation...', { templateId, title, industry });
+        const safeTemplateId = sanitizePromptInput(templateId);
+        const safeTitle = sanitizePromptInput(title);
+        const safeIndustry = sanitizePromptInput(industry);
+        const safeParams = sanitizePromptInput(parameters);
+
+        console.log('🚀 Starting Advanced SOP generation...', { templateId: safeTemplateId, title: safeTitle, industry: safeIndustry });
 
         const prompt = `You are an elite Standard Operating Procedure (SOP) architect with 20+ years of experience creating world-class operational documentation for Fortune 500 companies.
 
 **ASSIGNMENT**: Create a comprehensive, professional Standard Operating Procedure document.
 
 **CONTEXT**:
-- Template: ${templateId}
-- Title: ${title}
-- Industry: ${industry}
-- Parameters: ${JSON.stringify(parameters, null, 2)}
+- Template: ${safeTemplateId}
+- Title: ${safeTitle}
+- Industry: ${safeIndustry}
+- Parameters: ${safeParams}
 
 **REQUIREMENTS**:
 
@@ -606,13 +510,14 @@ Return ONLY the markdown content. No JSON, no explanations, just the formatted S
 // Helper to reuse the fetch logic
 async function callGemini(prompt: string) {
     if (!apiKey) throw new Error("API Key missing");
+    const safePrompt = sanitizePromptInput(prompt);
 
     const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
         {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            body: JSON.stringify({ contents: [{ parts: [{ text: safePrompt }] }] })
         }
     );
     if (!response.ok) throw new Error("API Failed");

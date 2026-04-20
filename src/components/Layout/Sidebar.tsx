@@ -1,165 +1,121 @@
-import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, FileText, Wand2, BarChart3, Settings, Rocket, LogOut, Zap, TrendingUp, Mail, Share2, Megaphone, Layout, Repeat, MessageSquare, RefreshCw, DollarSign, UserCircle, BookOpen } from 'lucide-react';
+import { NavLink, useLocation } from 'react-router-dom';
+import {
+    LayoutDashboard,
+    MessageCircle,
+    BookOpen,
+    DollarSign,
+    Compass,
+    Calculator,
+    FileText,
+    Layers,
+    Settings,
+    Layers as LogoIcon,
+    LogOut,
+    TrendingUp,
+    Globe,
+    PieChart,
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-export const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-    const { user, logout } = useAuth();
+const navSections = [
+    {
+        label: 'Co-Founder',
+        items: [
+            { to: '/dashboard', icon: LayoutDashboard, label: 'Command Center' },
+            { to: '/advisor', icon: MessageCircle, label: 'AI Co-Founder' },
+            { to: '/journal', icon: BookOpen, label: 'Founder Journal' },
+            { to: '/funding', icon: DollarSign, label: 'Funding Tracker' },
+        ],
+    },
+    {
+        label: 'Discover',
+        items: [
+            { to: '/trends', icon: TrendingUp, label: 'Trends & News' },
+            { to: '/directory', icon: Globe, label: 'Funding Directory' },
+        ],
+    },
+    {
+        label: 'Strategy & Ops',
+        items: [
+            { to: '/strategy', icon: Compass, label: 'Strategy Matrix' },
+            { to: '/advanced-sop', icon: FileText, label: 'Playbook Generator' },
+            { to: '/funnel-builder', icon: Layers, label: 'Growth Funnel' },
+            { to: '/cap-table', icon: PieChart, label: 'Cap Table Simulator' },
+        ],
+    },
+];
 
-    if (!user) return null;
-
-    const navItems = [
-        { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
-        { icon: Wand2, label: 'SOP Wizard', path: '/sop-wizard' },
-        { icon: BookOpen, label: 'Advanced SOP', path: '/advanced-sop' },
-        { icon: FileText, label: 'All SOPs', path: '/sops' },
-        { icon: Rocket, label: 'Funnel Builder', path: '/funnel-builder' },
-        { icon: BarChart3, label: 'Analytics', path: '/analytics' },
-        { icon: Settings, label: 'Settings', path: '/settings' },
-    ];
+export function Sidebar() {
+    const { logout } = useAuth();
+    const location = useLocation();
 
     return (
-        <>
-            {/* Mobile overlay */}
-            {isOpen && (
-                <div
-                    className="fixed inset-0 bg-slate-900/50 z-20 lg:hidden"
-                    onClick={onClose}
-                />
-            )}
-
-            <aside className={`
-                fixed top-0 left-0 z-30 h-screen w-64 border-r
-                border-slate-200 dark:border-architect-border
-                bg-white dark:bg-architect-dark/95
-                backdrop-blur-2xl
-                transition-all duration-300 ease-in-out
-                ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-            `}>
-                <div className="flex flex-col h-full relative">
-                    {/* Decorative gradient blur */}
-                    <div className="absolute top-0 left-0 w-full h-32 bg-brand-primary/5 dark:bg-brand-primary/10 blur-3xl pointer-events-none" />
-
-                    {/* Logo Area */}
-                    <div className="h-20 flex items-center px-8 border-b border-slate-200 dark:border-architect-border/50 bg-slate-50 dark:bg-architect-card/30 backdrop-blur-sm relative z-10">
-                        <Zap className="w-8 h-8 text-brand-primary mr-3" />
-                        <span className="font-black text-xl text-slate-900 dark:text-white tracking-tighter">
-                            SOP<span className="architect-gradient">MANAGER v2.0</span>
-                        </span>
+        <aside className="fixed left-0 top-0 h-full w-64 sidebar-bg border-r border-default flex flex-col z-50">
+            {/* Brand */}
+            <div className="px-6 py-5 border-b border-default">
+                <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-black dark:bg-white flex items-center justify-center shadow-sm border border-default">
+                        <LogoIcon className="w-5 h-5 text-white dark:text-black" />
                     </div>
-
-                    {/* Navigation */}
-                    <nav className="flex-1 overflow-y-auto pt-8 px-4 space-y-1 relative z-10 scrollbar-hide">
-                        <div className="px-4 mb-4 text-xs font-bold text-secondary dark:text-architect-muted uppercase tracking-wider">
-                            Management
-                        </div>
-                        {navItems.map((item) => (
-                            <NavLink
-                                key={item.path}
-                                to={item.path}
-                                onClick={() => window.innerWidth < 1024 && onClose()}
-                                className={({ isActive }) => `
-                                    flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 group
-                                    ${isActive
-                                        ? 'bg-slate-100 dark:bg-architect-card text-slate-900 dark:text-white shadow-lg ring-1 ring-slate-200 dark:ring-architect-border'
-                                        : 'text-slate-600 dark:text-architect-muted hover:bg-slate-50 dark:hover:bg-architect-card/50 hover:text-slate-900 dark:hover:text-white'
-                                    }
-                                `}
-                            >
-                                <item.icon className="w-5 h-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" />
-                                {item.label}
-                            </NavLink>
-                        ))}
-
-                        <div className="mt-8 px-4 mb-4 text-xs font-bold text-secondary dark:text-architect-muted uppercase tracking-wider">
-                            Advanced AI Tools
-                        </div>
-
-                        {[
-                            { icon: TrendingUp, label: 'Trend Scanner', path: '/trend-scanner' },
-                            { icon: Repeat, label: 'Repurpose Engine', path: '/content-repurposing' },
-                            { icon: UserCircle, label: 'Personas', path: '/audience-personas' },
-                            { icon: Rocket, label: 'AI Strategy', path: '/strategy' },
-                        ].map(item => (
-                            <NavLink
-                                key={item.path}
-                                to={item.path}
-                                className={({ isActive }) => `
-                                    flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 group
-                                    ${isActive
-                                        ? 'bg-gradient-to-r from-brand-primary to-brand-secondary text-white shadow-xl shadow-brand-primary/10'
-                                        : 'text-slate-600 dark:text-architect-muted hover:bg-slate-50 dark:hover:bg-architect-card/50 hover:text-slate-900 dark:hover:text-white'
-                                    }
-                                `}
-                            >
-                                <item.icon className="w-5 h-5 flex-shrink-0" />
-                                {item.label}
-                            </NavLink>
-                        ))}
-
-                        <div className="mt-8 px-4 mb-4 text-xs font-bold text-secondary dark:text-architect-muted uppercase tracking-wider">
-                            Growth & Ops
-                        </div>
-
-                        {[
-                            { icon: MessageSquare, label: 'Social Inbox', path: '/social-inbox' },
-                            { icon: RefreshCw, label: 'Optimization Loop', path: '/optimization' },
-                            { icon: DollarSign, label: 'Monetization', path: '/monetization' },
-                        ].map(item => (
-                            <NavLink
-                                key={item.path}
-                                to={item.path}
-                                className={({ isActive }) => `
-                                    flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 group
-                                    ${isActive
-                                        ? 'bg-slate-100 dark:bg-architect-card text-slate-900 dark:text-white ring-1 ring-slate-200 dark:ring-architect-border'
-                                        : 'text-slate-600 dark:text-architect-muted hover:bg-slate-50 dark:hover:bg-architect-card/50 hover:text-slate-900 dark:hover:text-white'
-                                    }
-                                `}
-                            >
-                                <item.icon className="w-5 h-5 flex-shrink-0" />
-                                {item.label}
-                            </NavLink>
-                        ))}
-
-                        <div className="mt-8 px-4 mb-4 text-xs font-bold text-secondary dark:text-architect-muted uppercase tracking-wider">
-                            Campaigns
-                        </div>
-
-                        {[
-                            { icon: Mail, label: 'Email Builder', path: '/email-campaigns' },
-                            { icon: Share2, label: 'Social Planner', path: '/social-media-planner' },
-                            { icon: Megaphone, label: 'Ad Copy', path: '/ad-copy' },
-                            { icon: Layout, label: 'Landing Pages', path: '/landing-pages' }
-                        ].map(item => (
-                            <NavLink
-                                key={item.path}
-                                to={item.path}
-                                className={({ isActive }) => `
-                                    flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 group
-                                    ${isActive
-                                        ? 'bg-slate-100 dark:bg-architect-card text-slate-900 dark:text-white ring-1 ring-slate-200 dark:ring-architect-border'
-                                        : 'text-slate-600 dark:text-architect-muted hover:bg-slate-50 dark:hover:bg-architect-card/50 hover:text-slate-900 dark:hover:text-white'
-                                    }
-                                `}
-                            >
-                                <item.icon className="w-5 h-5" />
-                                {item.label}
-                            </NavLink>
-                        ))}
-                    </nav>
-
-                    {/* Footer Actions */}
-                    <div className="p-6 border-t border-slate-200 dark:border-architect-border/50 relative z-10">
-                        <button
-                            onClick={logout}
-                            className="flex items-center gap-2 w-full px-4 py-2 text-sm font-semibold text-slate-600 dark:text-architect-muted hover:text-rose-500 dark:hover:text-rose-400 transition-colors"
-                        >
-                            <LogOut className="w-4 h-4" />
-                            Log Out
-                        </button>
+                    <div>
+                        <h1 className="text-lg font-black tracking-tight text-heading">FounderFlow</h1>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-faint">AI Co-Founder</p>
                     </div>
-                </div >
-            </aside >
-        </>
+                </div>
+            </div>
+
+            {/* Navigation */}
+            <nav className="flex-1 px-3 py-5 space-y-5 overflow-y-auto">
+                {navSections.map((section) => (
+                    <div key={section.label}>
+                        <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-faint">
+                            {section.label}
+                        </p>
+                        <div className="space-y-0.5">
+                            {section.items.map((item) => {
+                                const isActive = location.pathname === item.to;
+                                return (
+                                    <NavLink
+                                        key={item.to}
+                                        to={item.to}
+                                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group ${
+                                            isActive
+                                                ? 'bg-brand-primary/10 text-brand-primary border border-brand-primary/20'
+                                                : 'text-muted hover:text-heading hover:bg-black/5 dark:hover:bg-white/5 border border-transparent'
+                                        }`}
+                                    >
+                                        <item.icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-brand-primary' : 'text-muted group-hover:text-heading'}`} />
+                                        <span className="truncate">{item.label}</span>
+                                        {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-brand-primary shadow-[0_0_8px_rgba(79,172,254,0.6)]" />}
+                                    </NavLink>
+                                );
+                            })}
+                        </div>
+                    </div>
+                ))}
+            </nav>
+
+            {/* Footer */}
+            <div className="px-3 py-4 border-t border-default space-y-1">
+                <NavLink
+                    to="/settings"
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                        location.pathname === '/settings'
+                            ? 'bg-brand-primary/10 text-brand-primary'
+                            : 'text-muted hover:text-heading hover:bg-black/5 dark:hover:bg-white/5'
+                    }`}
+                >
+                    <Settings className="w-4 h-4" />
+                    <span>Settings</span>
+                </NavLink>
+                <button
+                    onClick={logout}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-muted hover:text-red-500 hover:bg-red-500/5 transition-all w-full"
+                >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out</span>
+                </button>
+            </div>
+        </aside>
     );
-};
+}
