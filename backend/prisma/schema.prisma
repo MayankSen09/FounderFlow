@@ -39,6 +39,8 @@ model User {
   activities       ActivityLog[]
   wizardSessions   WizardSession[]
   exportJobs       ExportJob[]
+
+  @@index([email])
 }
 
 model Playbook {
